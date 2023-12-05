@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ProductsController } from "../controllers/products.controller.js";
 import { checkRole } from "../middlewares/auth.js";
+import { generateProduct } from "../helpers/mock.js";
 
 const router = Router();
 
@@ -14,5 +15,14 @@ router.get("/:pid", ProductsController.getProductById);
 router.put("/:pid", checkRole(["admin"]), ProductsController.updateProduct);
 //delete product
 router.delete("/:pid", checkRole(["admin"]), ProductsController.deleteProduct);
+
+productsRouter.get("/mockingproducts", (req, res) => {
+    let mockingProducts = [];
+    for (let i = 0; i < 100; i++) {
+        const newProduct = generateProduct();
+        mockingProducts.push(newProduct);
+    };
+    res.json({status:"Success", data: mockingProducts})
+});
 
 export { router as productsRouter };

@@ -16,6 +16,7 @@ import { sessionsRouter } from "./routes/sessions.routes.js";
 import { connectDB } from "./config/dbConnection.js";
 import { initializePassport } from "./config/passport.config.js";
 import { checkRole } from "./middlewares/auth.js";
+import { errorHandler } from "./middlewares/errorHandler.js"
 
 const port = 8080;
 const app = express();
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser("claveCookies"));
+app.use(errorHandler);
 
 //passport
 initializePassport();
@@ -48,6 +50,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/chats", chatsRouter);
 app.use("/api/sessions", sessionsRouter);
+
 
 const io = new Server(httpServer);
 
