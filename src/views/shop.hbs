@@ -1,0 +1,31 @@
+<h1>Productos</h1>
+{{#if userName}}
+  <p>Hola {{userName}}</p>
+{{/if}}
+<div class="page">
+  {{#each payload}}
+    <div class="div">
+      <div class="img">
+        <img src="{{this.thumbnail}}" alt="{{this.title}}" />
+      </div>
+      <div class="product">
+        <h2>{{this.title}}</h2>
+        <h3>{{this.description}}</h3>
+        <h4>$ {{this.price}}</h4>
+        <h5>stock: {{this.stock}}</h5>
+        <button onclick="addToCart(`{{this._id}}`)">Agregar producto</button>
+      </div>
+    </div>
+  {{/each}}
+  <div class="links">
+    {{#if prevLink}}
+      <a href="{{prevLink}}">Pagina anterior</a>
+    {{/if}}
+    {{#if nextLink}}
+      <a href="{{nextLink}}">Próxima página</a>
+    {{/if}}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/shop.js"></script>
