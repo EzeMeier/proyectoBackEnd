@@ -1,4 +1,8 @@
 import { ProductsService } from "../services/products.service.js";
+import { generateProduct } from "../helpers/mock.js";
+import { EError } from "../enums/EError.js";
+import { CustomError } from "../services/errors/customError.service.js";
+import { updateProductError } from "../services/errors/createError.service.js";
 
 export class ProductsController {
   //get products
@@ -54,24 +58,41 @@ export class ProductsController {
     try {
       const pid = req.params.pid;
       const updatedContent = req.body;
-      const product = await ProductsService.updateProductStock(
-        pid,
-        updatedContent
-      );
+      const product = await ProductsService.updateProduct(pid, updatedContent);
+
+      const entries = Object.entries(updatedContent);
+      for (const [clave] of entries) {
+        if (
+          clave !== "title" &&
+          clave !== "description" &&
+          clave !== "price" &&
+          clave !== "code" &&
+          clave !== "stock" &&
+          clave !== "category" &&
+          clave !== "thumbnail"
+        ) {
+          const errorUpdateProduct = CustomError.createError({
+            name: "Error al modificar el producto",
+            cause: updateProductError(pid, updatedContent),
+            message: updateProductError(pid, updatedContent),
+            code: EError.PRODUCTS_ERROR,
+          });
+          logger.error(errorUpdateProduct);
+          throw new Error(errorUpdateProduct);
+        }
+      }
+
       if (product) {
         res.json({
           status: "success",
           message: "Producto modificado",
           data: product,
         });
-      } else {
-        res.json({ status: "error", message: "Error al modificar el producto" });
       }
     } catch (error) {
       res.json({ status: "error", message: error.message });
     }
   };
-
   //delete product
   static deleteProduct = async (req, res) => {
     try {
@@ -90,3 +111,18 @@ export class ProductsController {
     }
   };
 }
+
+ //GET MOCKING PRODUCTS
+   getMockingProducts = async (req, res) => {
+  try {
+    let products = [];
+    for (let i = 0; i < 100; i++) {
+      const newProducts = generateProduct();
+      products.push(newProducts);
+    }
+    res.json({ status: "succes", data: products });
+  } catch (error) {
+    res.json({ status: "error", message: error.message });
+  }
+};
+

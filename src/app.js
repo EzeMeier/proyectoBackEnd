@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 import { __dirname } from "./utils.js";
 import { engine } from "express-handlebars";
+import expressHandlebars from "express-handlebars";
+import helpers from "handlebars-helpers";
 import { Server } from "socket.io";
 import { viewsRouter } from "./routes/views.routes.js";
 import { productsRouter } from "./routes/products.routes.js";
@@ -15,8 +17,8 @@ import { chatsRouter } from "./routes/chat.routes.js";
 import { sessionsRouter } from "./routes/sessions.routes.js";
 import { connectDB } from "./config/dbConnection.js";
 import { initializePassport } from "./config/passport.config.js";
-import { checkRole } from "./middlewares/auth.js";
-import { errorHandler } from "./middlewares/errorHandler.js"
+import { errorHandler } from "./middlewares/errorHandler.js";
+import { logger } from "./helpers/logger.js";
 
 const port = 8080;
 const app = express();
@@ -26,20 +28,26 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser("claveCookies"));
-app.use(errorHandler);
 
 //passport
 initializePassport();
 app.use(passport.initialize());
 
 //handlebars
-app.engine(".hbs", engine({ extname: ".hbs" }));
+const { ifEquals } = helpers(["comparison"]);
+const handlebars = expressHandlebars.create({
+  extname: ".hbs",
+  helpers: {
+    ifEquals,
+  },
+});
+app.engine(".hbs", handlebars.engine);
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "/views"));
 
 //server
 const httpServer = app.listen(port, () =>
-  console.log(`Servidor corriendo en el puerto ${port}`)
+  logger.info(`Servidor corriendo en el puerto ${port}`)
 );
 
 connectDB();
@@ -51,13 +59,14 @@ app.use("/api/carts", cartsRouter);
 app.use("/api/chats", chatsRouter);
 app.use("/api/sessions", sessionsRouter);
 
+app.use(errorHandler);
 
 const io = new Server(httpServer);
 
 //PRODUCTS
 io.on("connection", async (socket) => {
   try {
-    console.log("Cliente conectado");
+    logger.info("Cliente conectado");
     const products = await ProductsService.getProducts();
     socket.emit("products", products);
 
@@ -78,7 +87,7 @@ io.on("connection", async (socket) => {
         const updatedProducts = await ProductsService.getProducts();
         io.emit("products", updatedProducts);
       } catch (error) {
-        console.log(error);
+        logger.error(error);
       }
     });
 
@@ -89,11 +98,11 @@ io.on("connection", async (socket) => {
 
         socket.emit("products", updatedProducts);
       } catch (error) {
-        console.log(error);
+        logger.error(error);
       }
     });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -105,14 +114,14 @@ io.on("connection", async (socket) => {
 
     socket.on("authenticated", async (data) => {
       try {
-        console.log("Authenticated event received:", data);
-        socket.broadcast.emit("newUser", `${data} is connected`);
+        console.log( data);
+        socket.broadcast.emit("newUser", `${data} esta conectado`);
       } catch (error) {
-        console.log(error);
+        logger.error(error);
       }
     });
 
-    socket.on("messageChat", checkRole(["user"]), async (data) => {
+    socket.on("messageChat", async (data) => {
       try {
         if (data.message.trim() !== "") {
           chat.push(data);
@@ -122,11 +131,11 @@ io.on("connection", async (socket) => {
           io.emit("chatHistory", messageDB);
         }
       } catch (error) {
-        console.log(error);
+        logger.error(error);
       }
     });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -136,6 +145,6 @@ io.on("connection", async (socket) => {
     const cart = await CartsService.getCarts();
     socket.emit("products", cart);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 });

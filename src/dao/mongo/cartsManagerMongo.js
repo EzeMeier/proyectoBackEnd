@@ -1,4 +1,6 @@
 import { cartsModel } from "./models/carts.model.js";
+import { logger } from "../../helpers/logger.js";
+
 
 export class CartsManagerMongo {
   constructor() {
@@ -12,7 +14,7 @@ export class CartsManagerMongo {
       const result = await this.model.create(cart);
       return result;
     } catch (error) {
-      console.log(`Error al agregar el carrito: ${error.message}`);
+      logger.error(`Error al agregar el carrito: ${error.message}`);
       throw new Error(`Error al agregar el carrito: ${error.message}`);
     }
   }
@@ -23,7 +25,7 @@ export class CartsManagerMongo {
       const result = await this.model.find().lean();
       return result;
     } catch (error) {
-      console.log(`Error al obtener el carrito: ${error.message}`);
+      logger.error(`Error al obtener el carrito: ${error.message}`);
       throw new Error(`Error al obtener el carrito: ${error.message}`);
     }
   }
@@ -41,7 +43,7 @@ export class CartsManagerMongo {
         return result;
       }
     } catch (error) {
-      console.log(`Error al obtener el ID del carrito: ${error.message}`);
+      logger.error(`Error al obtener el ID del carrito: ${error.message}`);
       throw new Error(`Error al obtener el ID del carrito: ${error.message}`);
     }
   }
@@ -60,7 +62,7 @@ export class CartsManagerMongo {
         return result;
       }
     } catch (error) {
-      console.log(`Error al modficar el carrito: ${error.message}`);
+      logger.error(`Error al modficar el carrito: ${error.message}`);
       throw new Error(`Error al modficar el carrito: ${error.message}`);
     }
   }
@@ -75,7 +77,7 @@ export class CartsManagerMongo {
         return result;
       }
     } catch (error) {
-      console.log(`Error al eliminar el carrito: ${error.message}`);
+      logger.error(`Error al eliminar el carrito: ${error.message}`);
       throw new Error(`Error al eliminar el carrito: ${error.message}`);
     }
   }
@@ -106,7 +108,7 @@ export class CartsManagerMongo {
       });
       return result;
     } catch (error) {
-      console.log(`Error al agregar productos al carrito: ${error.message}`);
+      logger.error(`Error al agregar productos al carrito: ${error.message}`);
       throw new Error(`Error al agregar productos al carrito: ${error.message}`);
     }
   }
@@ -132,7 +134,7 @@ export class CartsManagerMongo {
         throw new Error("Error al eliminar el producto");
       }
     } catch (error) {
-      console.log(`Error al eliminar el carrito: ${error.message}`);
+      logger.error(`Error al eliminar el carrito: ${error.message}`);
       throw new Error(`Error al eliminar el carrito: ${error.message}`);
     }
   }
@@ -153,7 +155,7 @@ export class CartsManagerMongo {
         return result;
       }
     } catch (error) {
-      console.log(`Error al modificar el carrito: ${error.message}`);
+      logger.error(`Error al modificar el carrito: ${error.message}`);
       throw new Error(`Error al modificar el carrito: ${error.message}`);
     }
   }

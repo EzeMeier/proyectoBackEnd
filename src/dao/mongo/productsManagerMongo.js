@@ -1,4 +1,12 @@
 import { productsModel } from "./models/products.model.js";
+import { EError } from "../../enums/EError.js";
+import { CustomError } from "../../services/errors/customError.service.js";
+import {
+  addProductError,
+  updateProductError,
+  deleteProductError,
+} from "../../services/errors/createError.service.js";
+import { logger } from "../../helpers/logger.js";
 
 export class ProductsManagerMongo {
   constructor() {
@@ -11,7 +19,7 @@ export class ProductsManagerMongo {
       const result = await this.model.find().lean();
       return result;
     } catch (error) {
-      console.log(`Error al obtener el producto: ${error.message}`);
+      logger.error(`Error al obtener el producto: ${error.message}`);
       throw new Error(`Error al obtener el producto: ${error.message}`);
     }
   }
@@ -22,7 +30,7 @@ export class ProductsManagerMongo {
       const result = await this.model.paginate(query, options);
       return result;
     } catch (error) {
-      console.log(`Error al obtener el producto: ${error.message}`);
+      logger.error(`Error al obtener el producto: ${error.message}`);
       throw new Error(`Error al obtener el producto: ${error.message}`);
     }
   }
@@ -33,8 +41,14 @@ export class ProductsManagerMongo {
       const result = await this.model.create(productInfo);
       return result;
     } catch (error) {
-      console.log(`Error al agregar el producto: ${error.message}`);
-      throw new Error(`Error al agregar el producto: ${error.message}`);
+      const errorAddProduct = CustomError.createError({
+        name: "Error al agregar el producto",
+        cause: addProductError(),
+        message: addProductError(),
+        code: EError.PRODUCTS_ERROR,
+      });
+      logger.error(errorAddProduct);
+      throw new Error(errorAddProduct);
     }
   }
 
@@ -44,7 +58,7 @@ export class ProductsManagerMongo {
       const result = await this.model.findById(id);
       return result;
     } catch (error) {
-      console.log(`Error al obtener el ID del producto: ${error.message}`);
+     logger.error(`Error al obtener el ID del producto: ${error.message}`);
       throw new Error(`El producto con este ID ${id} no fue encontrado`);
     }
   }
@@ -52,11 +66,19 @@ export class ProductsManagerMongo {
   //update product
   async updateProduct(id, updatedContent) {
     try {
-      const result = await this.model.findByIdAndUpdate(id, updatedContent);
+      const result = await this.model.findByIdAndUpdate(id, updatedContent, {
+        new: true,
+      });
       return result;
     } catch (error) {
-      console.log(`Error al modificar el producto: ${error.message}`);
-      throw new Error(`Error al modificar el producto: ${error.message}`);
+      const errorUpdateProduct = CustomError.createError({
+        name: "Error al modificar el producto",
+        cause: updateProductError(),
+        message: updateProductError(),
+        code: EError.PRODUCTS_ERROR,
+      });
+      logger.error(errorUpdateProduct);
+      throw new Error(errorUpdateProduct);
     }
   }
 
@@ -74,7 +96,7 @@ export class ProductsManagerMongo {
         return result;
       }
     } catch (error) {
-      console.log(`Error al modificar el stock del producto: ${error.message}`);
+      logger.error(`Error al modificar el stock del producto: ${error.message}`);
       throw new Error(`Error al modificar el stock del producto: ${error.message}`);
     }
   }
@@ -84,13 +106,19 @@ export class ProductsManagerMongo {
     try {
       const result = await this.model.findByIdAndDelete(id);
       if (!result) {
-        throw new Error("Producto no encontrado");
+        throw new Error(deleteProductError());
       } else {
         return result;
       }
     } catch (error) {
-      console.log(`Error al eliminar el producto: ${error.message}`);
-      throw new Error(`Error al eliminar el producto: ${error.message}`);
+      const errorDeleteProduct = CustomError.createError({
+        name: "Error al eliminar el producto",
+        cause: deleteProductError(),
+        message: deleteProductError(),
+        code: EError.PRODUCTS_ERROR,
+      });
+      logger.error(errorDeleteProduct);
+      throw new Error(errorDeleteProduct);
     }
   }
 }

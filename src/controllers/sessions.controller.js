@@ -1,4 +1,11 @@
 import { generateToken } from "../utils.js";
+import { CustomError } from "../services/errors/customError.service.js";
+import {
+  authError,
+  loginError,
+} from "../services/errors/createError.service.js";
+import { EError } from "../enums/EError.js";
+import { logger } from "../helpers/logger.js";
 
 export class SessionsController {
   //sign up
@@ -9,11 +16,16 @@ export class SessionsController {
     });
   };
 
-  //fail signup
+  //FAIL SIGNUP
   static failSignup = (req, res) => {
-    //ESTO NO ANDA
+    const signupError = CustomError.createError({
+      name: "Sign up error",
+      cause: authError(),
+      message: authError(),
+      code: EError.AUTH_ERROR,
+    });
     res.render("signup", {
-      error: "Error al crear el usuario",
+      error: signupError,
       style: "signup.css",
     });
   };
@@ -26,11 +38,18 @@ export class SessionsController {
       .json({ status: "success", message: "Logueo satisfactorio" });
   };
 
-  //fail login
+  //FAIL LOGIN
   static failLogin = (req, res) => {
-    //ESTO NO ANDA
-    res.render("login", { error: "Error al loguarse", style: "login.css" });
+    const errorLogin = CustomError.createError({
+      name: "Error al realizar el log in",
+      cause: loginError(),
+      message: "Email o contraseña ncorrecta",
+      code: EError.AUTH_ERROR,
+    });
+
+    res.render("login", { error: errorLogin, style: "login.css" });
   };
+
 
   //sign up with github
   static signupGithub = (req, res) => {

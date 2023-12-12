@@ -1,4 +1,6 @@
 import { usersModel } from "./models/users.model.js";
+import { logger } from "../../helpers/logger.js";
+
 
 export class UsersManagerMongo {
   constructor() {
@@ -19,7 +21,7 @@ export class UsersManagerMongo {
       const result = await this.model.create(userInfo);
       return result;
     } catch (error) {
-      console.log(`Error al agregar el usuario: ${error.message}`);
+      logger.error(`Error al agregar el usuario: ${error.message}`);
       throw new Error(`Error al agregar el usuario: ${error.message}`);
     }
   }
@@ -30,7 +32,7 @@ export class UsersManagerMongo {
       const result = await this.model.findById(id);
       return result;
     } catch (error) {
-      console.log(`Error al obtener el usuario por ID: ${error.message}`);
+     logger.error(`Error al obtener el usuario por ID: ${error.message}`);
       throw new Error(`Error al obtener el usuario por ID: ${error.message}`);
     }
   }
@@ -41,7 +43,7 @@ export class UsersManagerMongo {
       const result = await this.model.findOne({ email: email });
       return result;
     } catch (error) {
-      console.log(`Error al obtener el usuario por mail: ${error.message}`);
+      logger.error(`Error al obtener el usuario por mail: ${error.message}`);
       throw new Error(`Error al obtener el usuario por mail: ${error.message}`);
     }
   }
