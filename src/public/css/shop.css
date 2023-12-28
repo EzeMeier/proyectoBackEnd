@@ -11,10 +11,6 @@ p {
   margin-bottom: 3rem;
 }
 
-.page {
-  border-bottom: 1px solid blue;
-}
-
 .div {
   display: flex;
   justify-content: space-evenly;
@@ -43,7 +39,7 @@ p {
 button {
   font-size: small;
   background-color: transparent;
-  border: 1px solid blue;
+  border: 1px solid black;
   margin-top: 1rem;
   padding-block: 7px;
   padding-inline: 15px;
@@ -53,7 +49,7 @@ button {
 }
 
 button:hover {
-  background-color: blue;
+  background-color: black;
   color: white;
 }
 

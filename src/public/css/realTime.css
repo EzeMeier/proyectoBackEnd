@@ -7,7 +7,6 @@ h1 {
 
 div {
   text-align: center;
-  border-bottom: 1px solid blue;
   padding-bottom: 2rem;
   margin-inline: 5rem;
 }
@@ -24,7 +23,7 @@ input::placeholder {
 
 button {
   background-color: transparent;
-  border: 1px solid blue;
+  border: 1px solid black;
   margin-top: 1rem;
   padding-block: 10px;
   padding-inline: 30px;
@@ -34,7 +33,7 @@ button {
 }
 
 button:hover {
-  background-color: blue;
+  background-color: black;
   color: white;
 }
 

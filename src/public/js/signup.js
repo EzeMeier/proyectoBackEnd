@@ -1,5 +1,6 @@
 const loginForm = document.getElementById("loginForm");
 const error = document.getElementById("error");
+const message = document.getElementById("message");
 
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -7,6 +8,7 @@ loginForm.addEventListener("submit", async (e) => {
     email: e.target.email.value,
     password: e.target.password.value,
   };
+
   try {
     const response = await fetch("/api/sessions/login", {
       method: "POST",
@@ -20,10 +22,10 @@ loginForm.addEventListener("submit", async (e) => {
     if (result.status === "success") {
       window.location.href = "/profile";
     } else {
-      error.innerHTML = "Incorrect credentials";
+      window.location.href = "/api/sessions/fail-login";
     }
-  } catch (error) {
-    console.error(error);
-    error.innerHTML = "Error inesperado";
+  } catch (fetchError) {
+    console.error(fetchError);
+    window.location.href = "/api/sessions/fail-login";
   }
 });

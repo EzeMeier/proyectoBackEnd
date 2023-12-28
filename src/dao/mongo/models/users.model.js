@@ -3,12 +3,18 @@ import mongoose from "mongoose";
 const usersCollection = "users";
 
 const userSchema = new mongoose.Schema({
-  fullName: { type: String, require: true },
+  fullName: {
+    type: String,
+    require: true,
+  },
   firstName: {
     required: true,
     type: String,
   },
-  lastName: String,
+  lastName: {
+    required: true,
+    type: String,
+  },
   email: {
     type: String,
     required: true,
@@ -25,7 +31,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "admin"],
+    enum: ["user", "admin", "premium"],
   },
 });
 

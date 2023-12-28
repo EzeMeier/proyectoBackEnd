@@ -18,7 +18,7 @@ addProductForm.addEventListener("submit", (e) => {
   addProductForm.reset();
 
   Swal.fire({
-    title: `${jsonData.title} Agregado satisfactoriamente`,
+    title: `${jsonData.title} added successfully!`,
     showConfirmButton: false,
     timer: 1000,
   });
@@ -35,7 +35,7 @@ socketClient.on("products", (data) => {
     <h4>${product.description}</h4>
     <h5>$ ${product.price}</h5>
     <h6>stock: ${product.stock}</h6>
-    <button onClick="deleteProduct('${product._id}')">Eliminar</button>
+    <button onClick="deleteProduct('${product._id}')">delete</button>
   </li>`;
   });
 

@@ -16,10 +16,10 @@ class ProductsManagerFiles {
         const contenidoJson = JSON.parse(contenido);
         return contenidoJson;
       } else {
-        throw new Error("Error al obtener los productos");
+        throw new Error("error getting the products");
       }
     } catch (error) {
-      throw new Error("Error al obtener los productos: ", error.message);
+      throw new Error("get products error: ", error.message);
     }
   }
 
@@ -44,14 +44,14 @@ class ProductsManagerFiles {
           (field) => !productInfo.hasOwnProperty(field)
         );
         if (missingFields.length > 0) {
-          console.log("Todos los campos son obligatorios");
+          console.log("all fields are required");
         } else {
           //validar unico code
           const codeExist = contenidoJson.some((product) => {
             return product.code === productInfo.code;
           });
           if (codeExist) {
-            console.log(`Codigo ${productInfo.code} ya existente`);
+            console.log(`code ${productInfo.code} already exists!`);
           } else {
             //id autoincrementable
             const id = contenidoJson.reduce((maxId, product) => {
@@ -65,12 +65,12 @@ class ProductsManagerFiles {
               this.path,
               JSON.stringify(contenidoJson, null, "\t")
             );
-            return `${productInfo.title} agregado correctamente`;
+            return `${productInfo.title} added successfully`;
           }
         }
       }
     } catch (error) {
-      throw new Error(`Error al agregar el producto: ${error.message}`);
+      throw new Error(`add product error: ${error.message}`);
     }
   }
 
@@ -87,11 +87,11 @@ class ProductsManagerFiles {
         if (product) {
           return product;
         } else {
-          throw new Error("ID no encontrado");
+          throw new Error("ID not found");
         }
       }
     } catch (error) {
-      throw new Error("ID del producto no encontrado", error.message);
+      throw new Error("product id not found", error.message);
     }
   }
 
@@ -117,13 +117,13 @@ class ProductsManagerFiles {
             this.path,
             JSON.stringify(contenidoJson, null, "\t")
           );
-          return "Producto modificado correctamente";
+          return "product updated successfully";
         } else {
-          throw new Error("No se puede modificar el carrito ya que el ID no fue encontrado");
+          throw new Error("can't update product, id not found");
         }
       }
     } catch (error) {
-      throw new Error("Error al modificar el producto: ", error);
+      throw new Error("update product error: ", error);
     }
   }
 
@@ -141,10 +141,10 @@ class ProductsManagerFiles {
           this.path,
           JSON.stringify(newArray, null, "\t")
         );
-        return "Producto eliminado correctamente";
+        return "product successfully removed";
       }
     } catch (error) {
-      throw new Error("Error al eliminar el producto ", error);
+      throw new Error("delete products error: ", error);
     }
   }
 }

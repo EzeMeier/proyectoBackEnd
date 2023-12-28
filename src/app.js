@@ -19,6 +19,7 @@ import { connectDB } from "./config/dbConnection.js";
 import { initializePassport } from "./config/passport.config.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { logger } from "./helpers/logger.js";
+import { usersRouter } from "./routes/users.routes.js";
 
 const port = 8080;
 const app = express();
@@ -27,7 +28,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser("claveCookies"));
+app.use(cookieParser());
 
 //passport
 initializePassport();
@@ -47,7 +48,7 @@ app.set("views", path.join(__dirname, "/views"));
 
 //server
 const httpServer = app.listen(port, () =>
-  logger.info(`Servidor corriendo en el puerto ${port}`)
+  logger.info(`server running on port ${port}`)
 );
 
 connectDB();
@@ -58,6 +59,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/chats", chatsRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/api/users", usersRouter);
 
 app.use(errorHandler);
 
@@ -66,7 +68,7 @@ const io = new Server(httpServer);
 //PRODUCTS
 io.on("connection", async (socket) => {
   try {
-    logger.info("Cliente conectado");
+    logger.info("client connected");
     const products = await ProductsService.getProducts();
     socket.emit("products", products);
 
@@ -114,8 +116,8 @@ io.on("connection", async (socket) => {
 
     socket.on("authenticated", async (data) => {
       try {
-        console.log( data);
-        socket.broadcast.emit("newUser", `${data} esta conectado`);
+        console.log("Authenticated event received:", data);
+        socket.broadcast.emit("newUser", `${data} is connected`);
       } catch (error) {
         logger.error(error);
       }

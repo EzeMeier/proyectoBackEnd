@@ -22,7 +22,7 @@ export class CartsController {
       const cart = await CartsService.addCart();
       res.json({
         status: "success",
-        message: "Carrito agregado satisfactoriamente",
+        message: "cart added successfully",
         data: cart,
       });
     } catch (error) {
@@ -48,7 +48,7 @@ export class CartsController {
       await CartsService.deleteCart(cid);
       res.json({
         status: "success",
-        message: "Carrito eliminado",
+        message: "cart deleted successfully",
       });
     } catch (error) {
       res.json({ status: "error", message: error.message });
@@ -58,17 +58,19 @@ export class CartsController {
   //agregar productos al arreglo del carrito seleccionado
   static addProduct = async (req, res) => {
     try {
-      const { cid, pid } = req.params;
+      const cid = "656915f9d275608fc814127f";
+      const { pid } = req.params;
 
       //verificar que el cart y el product existan
       await CartsService.getCartById(cid);
       await ProductsService.getProductById(pid);
 
       const result = await CartsService.addProduct(cid, pid);
+      console.log(result);
 
       res.json({
         status: "success",
-        message: `Producto${pid} agregado al carrito ${cid} de forma satisfactoria`,
+        message: `product ${pid} added to cart ${cid} successfully`,
         data: result,
       });
     } catch (error) {
@@ -84,7 +86,7 @@ export class CartsController {
       const result = await CartsService.deleteProductCart(cid, pid);
       res.json({
         status: "success",
-        message: "Producto eliminado",
+        message: "product deleted from cart successfully",
         result,
       });
     } catch (error) {
@@ -106,7 +108,7 @@ export class CartsController {
       res.json({
         data: result,
         status: "success",
-        message: "Producto modificado satisfactoriamente",
+        message: "product updated successfully",
       });
     } catch (error) {
       res.json({ status: "error", message: error.message });
@@ -138,7 +140,7 @@ export class CartsController {
             if (newStock < 0) {
               rejectedProducts.push({
                 product: cartProducts,
-                reason: "Stock insuficiente",
+                reason: "insufficient stock",
               });
               continue;
             }
@@ -153,7 +155,7 @@ export class CartsController {
           } else {
             rejectedProducts.push({
               product: cartProducts,
-              reason: "Stock insuficiente",
+              reason: "insufficient stock",
             });
             continue;
           }
@@ -168,14 +170,14 @@ export class CartsController {
 
         const date = new Date();
         const localDateTime = date.toLocaleDateString();
-        console.log(localDateTime);
+
         //datos del ticket
         const newTicket = {
           code: uuidv4(),
           purchase_datetime: localDateTime,
           amount: total,
           //hardcodeado porque no me lee req.user
-          purchaser: "meierezequiel@gmail.com",
+          purchaser: "valeria.casatti@gmail.com",
         };
 
         //crear ticket en DB
@@ -186,16 +188,17 @@ export class CartsController {
         await TicketsService.getTicketById(ticketId);
 
         //enviar ticket por gmail
-        const template = (ticket) => `<h1>Gracias por su compra</h1>
-          ${ticket.code}
-         ${ticket.purchase_datetime}
-          ${ticket.amount}
-        `;
+        const template = (ticket) => `<h1>thanks for your purchase🥰</h1>
+         <h3>Purchase details:</h3>
+         <p>purchase code: ${ticket.code}</p>
+         <p>date: ${ticket.purchase_datetime}</p>
+         <p>purchase total: ${ticket.amount}</p>
+         <h2>hope to see u again💕</h2>`;
 
         await transporter.sendMail({
           from: config.gmail.account,
           to: ticket.purchaser,
-          subject: "Ticket",
+          subject: "purchase receipt",
           html: template(ticket),
         });
 
@@ -209,19 +212,19 @@ export class CartsController {
           return res.json({
             status: "success",
             message:
-              "Compra completa, estos productos quedaron afuera por falta de stock: ",
+              "purchase complete, these products were left out of your purchase due to lack of stock: ",
             rejectedProducts,
             ticket: ticket,
           });
         } else {
           return res.json({
             status: "success",
-            message: "Compra completa",
+            message: "purchase complete successfully!",
             ticket: ticket,
           });
         }
       } else {
-        res.json({ status: "error", message: "Carrito vacio" });
+        res.json({ status: "error", message: "this cart is empty" });
       }
     } catch (error) {
       res.json({ status: "error", message: error.message });

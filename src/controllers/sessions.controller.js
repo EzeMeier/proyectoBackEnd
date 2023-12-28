@@ -1,4 +1,4 @@
-import { generateToken } from "../utils.js";
+import { createHash, generateToken } from "../utils.js";
 import { CustomError } from "../services/errors/customError.service.js";
 import {
   authError,
@@ -6,17 +6,24 @@ import {
 } from "../services/errors/createError.service.js";
 import { EError } from "../enums/EError.js";
 import { logger } from "../helpers/logger.js";
+import { UsersService } from "../services/users.service.js";
+import {
+  generateEmailToken,
+  sendChangePasswordEmail,
+  verifyEmailToken,
+} from "../helpers/email.js";
+import { isValidPassword } from "../utils.js";
 
 export class SessionsController {
   //sign up
-  static redirectLogin = async (req, res) => {
+  static signup = async (req, res) => {
     res.render("login", {
-      message: "Usuario creado satisfactoriamente",
+      message: "user created successfully",
       style: "login.css",
     });
   };
 
-  //FAIL SIGNUP
+  //MANEJO DE ERRORES DE AUTENTICACION, FAIL SIGNUP
   static failSignup = (req, res) => {
     const signupError = CustomError.createError({
       name: "Sign up error",
@@ -35,21 +42,21 @@ export class SessionsController {
     const token = generateToken(req.user);
     res
       .cookie("cookieToken", token)
-      .json({ status: "success", message: "Logueo satisfactorio" });
+      .json({ status: "success", message: "login successfully" })
+      .render("profile", { style: "profile.css" });
   };
 
-  //FAIL LOGIN
+  //MANEJO DE ERRORES DE AUTENTICACION, FAIL LOGIN
   static failLogin = (req, res) => {
     const errorLogin = CustomError.createError({
-      name: "Error al realizar el log in",
+      name: "Log in error",
       cause: loginError(),
-      message: "Email o contraseña ncorrecta",
+      message: "email or password incorrect",
       code: EError.AUTH_ERROR,
     });
 
     res.render("login", { error: errorLogin, style: "login.css" });
   };
-
 
   //sign up with github
   static signupGithub = (req, res) => {
@@ -67,19 +74,79 @@ export class SessionsController {
       .redirect("/profile", 200, { style: "profile.css" });
   };
 
+  //forgot password
+  static forgotPassword = async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await UsersService.getUserByEmail(email);
+      const emailToken = generateEmailToken(email, 60 * 60);
+      await sendChangePasswordEmail(req, email, emailToken);
+
+      res.render("login", {
+        message: `we send you a link to ${email}`,
+        style: "login.css",
+      });
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  //reset password
+  static resetPassword = async (req, res) => {
+    try {
+      const token = req.query.token;
+      const { newPassword } = req.body;
+      const validEmail = verifyEmailToken(token);
+      //link expired
+      if (!validEmail) {
+        res.render("forgotPassword", {
+          error: `The link expired, make a new one`,
+          style: "forgotPassword.css",
+        });
+      }
+      //user not found
+      const user = await UsersService.getUserByEmail(validEmail);
+      if (!user) {
+        res.render("resetPassword", {
+          error: "Invalid operation",
+          style: "resetPassword.css",
+        });
+      }
+      //repeated password
+      if (isValidPassword(newPassword, user)) {
+        res.render("resetPassword", {
+          token,
+          error: "Invalid password, try another",
+          style: "resetPassword.css",
+        });
+      }
+      //change password
+      const userData = {
+        ...user,
+        password: createHash(newPassword),
+      };
+      await UsersService.updateUser(user._id, userData);
+      res.render("login", {
+        message: `Password updated successfully!`,
+        style: "login.css",
+      });
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   //profile
   static profile = async (req, res) => {
     try {
-      console.log(req.user);
-      res.json({ status: "success", message: "Respuesta correcta", data: req.user });
+      res.json({ status: "success", message: "valid request", data: req.user });
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
   //fail auth
   static failAuth = (req, res) => {
-    res.json({ status: "error", message: "Token invalido" });
+    res.json({ status: "error", message: "invalid token" });
   };
 
   //logout
@@ -88,7 +155,7 @@ export class SessionsController {
       res.clearCookie("cookieToken");
       res.redirect("/login", 200, { style: "login.css" });
     } catch (error) {
-      res.render("profile", { error: "Error al loguarse", style: "profile.css" });
+      res.render("profile", { error: "logout error", style: "profile.css" });
     }
   };
 }

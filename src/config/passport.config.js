@@ -136,6 +136,7 @@ export const initializePassport = () => {
     )
   );
 
+  //extraer cookie
   const cookieExtractor = (req) => {
     let token;
     if (req && req.cookies) {
@@ -155,10 +156,11 @@ export const initializePassport = () => {
         jwtFromRequest: extractJwt.fromExtractors([cookieExtractor]),
         secretOrKey: config.token.privateKey,
       },
+
       async (jwtPayload, done) => {
         try {
-          const result = new CreateUser(jwtPayload);
-          return done(null, result); //req.user = info del token
+          const result = new CreateUser(jwtPayload); //req.user = info del token
+          return done(null, result);
         } catch (error) {
           return done(error);
         }

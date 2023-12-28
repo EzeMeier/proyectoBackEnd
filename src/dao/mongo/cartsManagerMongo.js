@@ -1,7 +1,6 @@
 import { cartsModel } from "./models/carts.model.js";
 import { logger } from "../../helpers/logger.js";
 
-
 export class CartsManagerMongo {
   constructor() {
     this.model = cartsModel;
@@ -14,8 +13,8 @@ export class CartsManagerMongo {
       const result = await this.model.create(cart);
       return result;
     } catch (error) {
-      logger.error(`Error al agregar el carrito: ${error.message}`);
-      throw new Error(`Error al agregar el carrito: ${error.message}`);
+      logger.error(`add cart error: ${error.message}`);
+      throw new Error(`add cart error: ${error.message}`);
     }
   }
 
@@ -25,8 +24,8 @@ export class CartsManagerMongo {
       const result = await this.model.find().lean();
       return result;
     } catch (error) {
-      logger.error(`Error al obtener el carrito: ${error.message}`);
-      throw new Error(`Error al obtener el carrito: ${error.message}`);
+      logger.error(`get carts error: ${error.message}`);
+      throw new Error(`get carts error: ${error.message}`);
     }
   }
 
@@ -38,13 +37,13 @@ export class CartsManagerMongo {
         .populate("products.productId")
         .lean();
       if (!result) {
-        throw new Error("El carrito no existe");
+        throw new Error("cart does not exist");
       } else {
         return result;
       }
     } catch (error) {
-      logger.error(`Error al obtener el ID del carrito: ${error.message}`);
-      throw new Error(`Error al obtener el ID del carrito: ${error.message}`);
+      logger.error(`get cart by ID error: ${error.message}`);
+      throw new Error(`get cart by ID error: ${error.message}`);
     }
   }
 
@@ -57,13 +56,13 @@ export class CartsManagerMongo {
         { new: true }
       );
       if (result.nModified === 0) {
-        throw new Error("Carrito no encontrado");
+        throw new Error("cart not found");
       } else {
         return result;
       }
     } catch (error) {
-      logger.error(`Error al modficar el carrito: ${error.message}`);
-      throw new Error(`Error al modficar el carrito: ${error.message}`);
+      logger.error(`update cart error: ${error.message}`);
+      throw new Error(`update cart error: ${error.message}`);
     }
   }
 
@@ -72,13 +71,13 @@ export class CartsManagerMongo {
     try {
       const result = await this.model.findByIdAndDelete(id);
       if (!result) {
-        throw new Error("Carrito no encontrado");
+        throw new Error("cart not found");
       } else {
         return result;
       }
     } catch (error) {
-      logger.error(`Error al eliminar el carrito: ${error.message}`);
-      throw new Error(`Error al eliminar el carrito: ${error.message}`);
+      logger.error(`delete cart error: ${error.message}`);
+      throw new Error(`delete cart error: ${error.message}`);
     }
   }
 
@@ -108,8 +107,8 @@ export class CartsManagerMongo {
       });
       return result;
     } catch (error) {
-      logger.error(`Error al agregar productos al carrito: ${error.message}`);
-      throw new Error(`Error al agregar productos al carrito: ${error.message}`);
+      logger.error(`add product to cart error: ${error.message}`);
+      throw new Error(`add product to cart error: ${error.message}`);
     }
   }
 
@@ -131,11 +130,11 @@ export class CartsManagerMongo {
         });
         return result;
       } else {
-        throw new Error("Error al eliminar el producto");
+        throw new Error("error deleting product...");
       }
     } catch (error) {
-      logger.error(`Error al eliminar el carrito: ${error.message}`);
-      throw new Error(`Error al eliminar el carrito: ${error.message}`);
+      logger.error(`delete cart error: ${error.message}`);
+      throw new Error(`delete cart error: ${error.message}`);
     }
   }
 
@@ -155,8 +154,8 @@ export class CartsManagerMongo {
         return result;
       }
     } catch (error) {
-      logger.error(`Error al modificar el carrito: ${error.message}`);
-      throw new Error(`Error al modificar el carrito: ${error.message}`);
+      logger.error(`update product cart error: ${error.message}`);
+      throw new Error(`update product cart error: ${error.message}`);
     }
   }
 }

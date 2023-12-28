@@ -19,18 +19,15 @@ export class ProductsController {
   static addProduct = async (req, res) => {
     try {
       const productInfo = req.body;
+      productInfo.owner = req.user._id;
       const product = await ProductsService.addProduct(productInfo);
-
       if (product) {
         res.json({
           status: "success",
-          message: `${productInfo.title} Agregado satisfactoriamente`,
+          message: `${productInfo.title} added successfully`,
         });
-      } else {
-        res.json({ status: "error", message: "Error al agregar el producto" });
       }
     } catch (error) {
-      console.log(error.message);
       res.json({ status: "error", message: error.message });
     }
   };
@@ -46,7 +43,7 @@ export class ProductsController {
           data: product,
         });
       } else {
-        res.json({ status: "error", message: "Error al obtener el producto" });
+        res.json({ status: "error", message: "error getting product..." });
       }
     } catch (error) {
       res.json({ status: "error", message: error.message });
@@ -72,7 +69,7 @@ export class ProductsController {
           clave !== "thumbnail"
         ) {
           const errorUpdateProduct = CustomError.createError({
-            name: "Error al modificar el producto",
+            name: "error updating product",
             cause: updateProductError(pid, updatedContent),
             message: updateProductError(pid, updatedContent),
             code: EError.PRODUCTS_ERROR,
@@ -85,7 +82,7 @@ export class ProductsController {
       if (product) {
         res.json({
           status: "success",
-          message: "Producto modificado",
+          message: "product updated successfully",
           data: product,
         });
       }
@@ -93,36 +90,46 @@ export class ProductsController {
       res.json({ status: "error", message: error.message });
     }
   };
+
   //delete product
   static deleteProduct = async (req, res) => {
     try {
       const pid = req.params.pid;
-      const product = await ProductsService.deleteProduct(pid);
-      if (product) {
-        res.json({
-          status: "success",
-          message: "Producto eliminado",
-        });
+      const product = await ProductsService.getProductById(pid);
+      if (
+        (req.user.role === "premium" &&
+          product.owner.toString() === req.user._id.toString()) ||
+        req.user.role === "admin"
+      ) {
+        const result = await ProductsService.deleteProduct(pid);
+        if (result) {
+          res.json({
+            status: "success",
+            message: "product deleted successfully",
+          });
+        }
       } else {
-        res.json({ status: "error", message: "Error al eliminar el producto" });
+        res.json({
+          status: "error",
+          message: `${req.user.fullName} lacks delete permission for this product.`,
+        });
       }
     } catch (error) {
       res.json({ status: "error", message: error.message });
     }
   };
-}
 
- //GET MOCKING PRODUCTS
-   getMockingProducts = async (req, res) => {
-  try {
-    let products = [];
-    for (let i = 0; i < 100; i++) {
-      const newProducts = generateProduct();
-      products.push(newProducts);
+  //GET MOCKING PRODUCTS
+  static getMockingProducts = async (req, res) => {
+    try {
+      let products = [];
+      for (let i = 0; i < 100; i++) {
+        const newProducts = generateProduct();
+        products.push(newProducts);
+      }
+      res.json({ status: "succes", data: products });
+    } catch (error) {
+      res.json({ status: "error", message: error.message });
     }
-    res.json({ status: "succes", data: products });
-  } catch (error) {
-    res.json({ status: "error", message: error.message });
-  }
-};
-
+  };
+}

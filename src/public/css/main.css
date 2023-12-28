@@ -1,10 +1,10 @@
-
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap");
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Arial", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 nav {
@@ -13,7 +13,7 @@ nav {
   justify-content: space-around;
   margin-bottom: 1rem;
   padding-block: 1.5rem;
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid black;
   position: fixed;
   top: 0;
   left: 0;
@@ -28,10 +28,11 @@ a {
 }
 
 footer ul {
+  border-top: 1px solid black;
   display: flex;
   justify-content: space-evenly;
   list-style-type: none;
-  margin-block: 2rem;
+  padding-block: 2rem;
   text-transform: uppercase;
   font-size: smaller;
 }

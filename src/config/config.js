@@ -20,5 +20,6 @@ export const config = {
   gmail: {
     account: process.env.GMAIL_ACCOUNT,
     password: process.env.GMAIL_PASSWORD,
+    token: process.env.TOKEN_EMAIL,
   },
 };

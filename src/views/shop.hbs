@@ -1,7 +1,5 @@
-<h1>Productos</h1>
-{{#if userName}}
-  <p>Hola {{userName}}</p>
-{{/if}}
+<h1>shop</h1>
+
 <div class="page">
   {{#each payload}}
     <div class="div">
@@ -13,16 +11,16 @@
         <h3>{{this.description}}</h3>
         <h4>$ {{this.price}}</h4>
         <h5>stock: {{this.stock}}</h5>
-        <button onclick="addToCart(`{{this._id}}`)">Agregar producto</button>
+        <button onclick="addToCart('{{this._id}}')">add to cart</button>
       </div>
     </div>
   {{/each}}
   <div class="links">
     {{#if prevLink}}
-      <a href="{{prevLink}}">Pagina anterior</a>
+      <a href="{{prevLink}}">prev page</a>
     {{/if}}
     {{#if nextLink}}
-      <a href="{{nextLink}}">Próxima página</a>
+      <a href="{{nextLink}}">next page</a>
     {{/if}}
   </div>
 </div>

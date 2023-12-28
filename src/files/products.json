@@ -1,1 +1,102 @@
-[]
+[
+  {
+    "title": "Hoodie Galaxy",
+    "description": "Black oversize hoodie",
+    "price": 15500,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800305/hoodieGalaxy_mfam50.jpg",
+    "code": "PROD1",
+    "stock": 1,
+    "status": true,
+    "category": "top"
+  },
+  {
+    "title": "Cosmo Dress",
+    "description": "Short black strapless leather dress",
+    "price": 13000,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800303/cosmoDress_e6b1ry.jpg",
+    "code": "PROD2",
+    "stock": 2,
+    "status": true,
+    "category": "full"
+  },
+  {
+    "title": "Corset Venus",
+    "description": "Black corset with thin straps",
+    "price": 11500,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800304/corsetVenus_hsuwrd.jpg",
+    "code": "PROD3",
+    "stock": 3,
+    "status": true,
+    "category": "top"
+  },
+  {
+    "title": "Sky Skirt",
+    "description": "Denim skirt with front pockets",
+    "price": 14300,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800306/skySkirt_dkuofw.jpg",
+    "code": "PROD4",
+    "stock": 4,
+    "status": true,
+    "category": "bottom"
+  },
+  {
+    "title": "Cosmo Pants",
+    "description": "Denim cargo pant",
+    "price": 14200,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800304/cosmoPants_wnbnjp.jpg",
+    "code": "PROD5",
+    "stock": 5,
+    "status": true,
+    "category": "bottom"
+  },
+  {
+    "title": "Body Nebula",
+    "description": "Asymmetrical black bodysuit, single long sleeve",
+    "price": 9800,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800304/bodyNebula_hc6zq5.jpg",
+    "code": "PROD6",
+    "stock": 6,
+    "status": true,
+    "category": "top"
+  },
+  {
+    "title": "Sunlight Dress",
+    "description": "Black dress with straight neckline & thin straps, ideal for day or night",
+    "price": 12300,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800307/sunlightDress_mzbge7.jpg",
+    "code": "PROD7",
+    "stock": 7,
+    "status": true,
+    "category": "full"
+  },
+  {
+    "title": "Saturn Pants",
+    "description": "Straight black leather pant",
+    "price": 16400,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800306/saturnPants_wax3z4.jpg",
+    "code": "PROD8",
+    "stock": 8,
+    "status": true,
+    "category": "bottom"
+  },
+  {
+    "title": "Space Shirt",
+    "description": "Graphite gray oversize t-shirt with front stamp",
+    "price": 10200,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800306/spaceShirt_veoey5.jpg",
+    "code": "PROD9",
+    "stock": 9,
+    "status": true,
+    "category": "top"
+  },
+  {
+    "title": "Moon Set",
+    "description": "Black leather blazer & pant set. Oversize, super comfy & classy",
+    "price": 17300,
+    "thumbnail": "https://res.cloudinary.com/dqrgdohtt/image/upload/v1687800305/moonSet_b8o7yc.jpg",
+    "code": "PROD10",
+    "stock": 10,
+    "status": true,
+    "category": "full"
+  }
+]

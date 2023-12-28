@@ -17,6 +17,7 @@ export class ViewsController {
         query,
         options
       );
+
       const baseUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
       const data = {
         status: "success",
@@ -44,7 +45,6 @@ export class ViewsController {
           : null,
         style: "shop.css",
       };
-
       res.render("shop", data);
     } catch (error) {
       res.render({ error: error.message });
@@ -62,12 +62,12 @@ export class ViewsController {
   //cart
   static cart = async (req, res) => {
     try {
-      const cid = "65668aac0971f5b665ba8128";
+      const cid = "656915f9d275608fc814127f";
       const cart = await CartsService.getCartById(cid);
       if (!cart) {
-        return res.render("Carrito no encontrado");
+        return res.render("cart not found");
       } else {
-        res.render("cart", { products: cart.products, style: "cart.css" });
+        res.render("cart", { cart, style: "cart.css" });
       }
     } catch (error) {
       res.render({ error: error.message });
@@ -82,8 +82,18 @@ export class ViewsController {
   static login = (req, res) => {
     res.render("login", { style: "login.css" });
   };
+  //forgot password
+  static forgotPassword = (req, res) => {
+    res.render("forgotPassword", { style: "forgotPassword.css" });
+  };
+  //reset password
+  static resetPassword = (req, res) => {
+    const token = req.query.token;
+    res.render("resetPassword", { token, style: "resetPassword.css" });
+  };
   //profile
   static profile = (req, res) => {
-    res.render("profile", { style: "profile.css" });
+    let { message } = req.query;
+    res.render("profile", { message, style: "profile.css" });
   };
 }

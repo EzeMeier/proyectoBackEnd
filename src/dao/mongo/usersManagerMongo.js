@@ -1,7 +1,6 @@
 import { usersModel } from "./models/users.model.js";
 import { logger } from "../../helpers/logger.js";
 
-
 export class UsersManagerMongo {
   constructor() {
     this.model = usersModel;
@@ -10,19 +9,11 @@ export class UsersManagerMongo {
   //add user
   async addUser(userInfo) {
     try {
-      if (
-        userInfo.email === "adminCoder@coder.com" &&
-        userInfo.password === "adminCod3r123"
-      ) {
-        userInfo.role = "admin";
-      } else {
-        userInfo.role = "user";
-      }
       const result = await this.model.create(userInfo);
       return result;
     } catch (error) {
-      logger.error(`Error al agregar el usuario: ${error.message}`);
-      throw new Error(`Error al agregar el usuario: ${error.message}`);
+      logger.error(`add user error: ${error.message}`);
+      throw new Error(`add user error: ${error.message}`);
     }
   }
 
@@ -32,19 +23,32 @@ export class UsersManagerMongo {
       const result = await this.model.findById(id);
       return result;
     } catch (error) {
-     logger.error(`Error al obtener el usuario por ID: ${error.message}`);
-      throw new Error(`Error al obtener el usuario por ID: ${error.message}`);
+      logger.error(`get user by ID error: ${error.message}`);
+      throw new Error(`get user by ID error: ${error.message}`);
     }
   }
 
   //get user by email
   async getUserByEmail(email) {
     try {
-      const result = await this.model.findOne({ email: email });
+      const result = await this.model.findOne({ email: email }).lean();
       return result;
     } catch (error) {
-      logger.error(`Error al obtener el usuario por mail: ${error.message}`);
-      throw new Error(`Error al obtener el usuario por mail: ${error.message}`);
+      logger.error(`get user by email error: ${error.message}`);
+      throw new Error(`get user by email error: ${error.message}`);
+    }
+  }
+
+  //update user
+  async updateUser(id, user) {
+    try {
+      const result = await this.model.findByIdAndUpdate(id, user, {
+        new: true,
+      });
+      return result;
+    } catch (error) {
+      logger.error(`update user error: ${error.message}`);
+      throw new Error(`update user error: ${error.message}`);
     }
   }
 }

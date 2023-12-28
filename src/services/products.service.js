@@ -1,7 +1,4 @@
 import { productsDao } from "../dao/index.js";
-import { CustomError } from "./errors/customError.service.js";
-import { deleteProductError } from "./errors/createError.service.js";
-import { EError } from "../enums/EError.js";
 
 export class ProductsService {
   //get products

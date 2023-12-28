@@ -1,5 +1,5 @@
 h1 {
-  margin-top: 8rem;
+  margin-top: 15rem;
   text-align: center;
   text-transform: uppercase;
   margin-bottom: 2rem;
@@ -7,7 +7,7 @@ h1 {
 
 .div {
   display: flex;
-  border: 1px solid blue;
+  border: 1px solid black;
   padding: 2rem;
   align-items: center;
   margin-bottom: 2rem;
@@ -31,7 +31,7 @@ h1 {
 button {
   font-size: small;
   background-color: transparent;
-  border: 1px solid blue;
+  border: 1px solid black;
   margin-top: 1rem;
   padding-block: 7px;
   padding-inline: 15px;
@@ -41,6 +41,21 @@ button {
 }
 
 button:hover {
-  background-color: blue;
+  background-color: black;
   color: white;
+}
+
+#total {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#total button {
+  background-color: pink;
+}
+
+#purchase,
+#emptyCart {
+  text-align: center;
+  padding-bottom: 14rem;
 }

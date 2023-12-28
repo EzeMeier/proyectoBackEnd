@@ -12,7 +12,7 @@ router.post(
     session: false,
     failureRedirect: "/api/sessions/fail-signup",
   }),
-  SessionsController.redirectLogin
+  SessionsController.signup
 );
 
 //fail signup
@@ -30,6 +30,12 @@ router.post(
 
 //fail login
 router.get("/fail-login", SessionsController.failLogin);
+
+//forgot password
+router.post("/forgot-password", SessionsController.forgotPassword);
+
+//reset password
+router.post("/reset-password", SessionsController.resetPassword);
 
 //sign up with github
 router.get("/signup-github", passport.authenticate("signupGithubStrategy"));

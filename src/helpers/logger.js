@@ -14,9 +14,9 @@ const customLevels = {
   },
   colors: {
     error: "red",
-    warning: "orange",
-    info: "blue",
-    debbug: "green",
+    warning: "yellow",
+    info: "cyan",
+    debbug: "magenta",
   },
 };
 

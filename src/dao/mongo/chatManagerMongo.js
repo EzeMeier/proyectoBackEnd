@@ -12,8 +12,8 @@ export class ChatManagerMongo {
       const result = await this.model.find();
       return result;
     } catch (error) {
-      logger.error(`Error al obtener el mensaje: ${error.message}`);
-      throw new Error(`Error al obtener el mensaje: ${error.message}`);
+      logger.error(`get messagges error: ${error.message}`);
+      throw new Error(`get messagges error: ${error.message}`);
     }
   }
 
@@ -23,8 +23,8 @@ export class ChatManagerMongo {
       const result = await this.model.create(data);
       return result;
     } catch (error) {
-      logger.error(`Error al agregar el mensaje: ${error.message}`);
-      throw new Error(`Error al agregar el mensaje: ${error.message}`);
+      logger.error(`add messagge error: ${error.message}`);
+      throw new Error(`add messagge error: ${error.message}`);
     }
   }
 }

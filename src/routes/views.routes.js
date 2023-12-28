@@ -17,6 +17,10 @@ router.get("/cart", ViewsController.cart);
 router.get("/signup", ViewsController.signup);
 //login
 router.get("/login", ViewsController.login);
+//forgot password
+router.get("/forgot-password", ViewsController.forgotPassword);
+//reset password
+router.get("/reset-password", ViewsController.resetPassword);
 //profile
 router.get("/profile", ViewsController.profile);
 //LOGGER TEST

@@ -32,11 +32,15 @@ const productSchema = new mongoose.Schema({
   category: {
     required: true,
     type: String,
-    enum: ["full", "top", "bottom"],
   },
   thumbnail: {
     required: true,
     type: String,
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    default: "admin",
   },
 });
 

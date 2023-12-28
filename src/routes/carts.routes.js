@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { CartsController } from "../controllers/carts.controller.js";
-import { checkRole } from "../middlewares/auth.js";
+import { checkRole, isAuth } from "../middlewares/auth.js";
 
 const router = Router();
 
@@ -17,10 +17,20 @@ router.get("/:cid", CartsController.getCartById);
 router.delete("/:cid", CartsController.deleteCart);
 
 //agregar productos al arreglo del carrito seleccionado (solo users)
-router.post("/:cid/products/:pid", CartsController.addProduct);
+router.post(
+  "/:cid/products/:pid",
+  isAuth,
+  checkRole(["user"]),
+  CartsController.addProduct
+);
 
 //eliminar product del cart
-router.delete("/:cid/products/:pid", CartsController.deleteProductCart);
+router.delete(
+  "/:cid/products/:pid",
+  isAuth,
+  checkRole(["user"]),
+  CartsController.deleteProductCart
+);
 
 //actualizar quantity del product en el cart
 router.put("/:cid/products/:pid", CartsController.updateProductCart);

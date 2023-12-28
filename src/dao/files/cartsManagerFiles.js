@@ -18,10 +18,10 @@ class CartsManagerFiles {
         const contenidoJson = JSON.parse(contenido);
         return contenidoJson;
       } else {
-        throw new Error("Error al conseguir el carrito");
+        throw new Error("error getting the carts");
       }
     } catch (error) {
-      throw new Error("Error con carrito: ", error.message);
+      throw new Error("get carts error: ", error.message);
     }
   }
 
@@ -47,7 +47,7 @@ class CartsManagerFiles {
         // console.log("cart added successfully");
       }
     } catch (error) {
-      throw new Error("Error al crear el carrito ", error.message);
+      throw new Error("create carts error: ", error.message);
     }
   }
 
@@ -63,11 +63,11 @@ class CartsManagerFiles {
         if (cart) {
           return cart;
         } else {
-          throw new Error("ID no encontrado");
+          throw new Error("ID not found");
         }
       }
     } catch (error) {
-      throw new Error("ID de carrito no encontrado", error.message);
+      throw new Error("cart id not found", error.message);
     }
   }
 
@@ -93,13 +93,13 @@ class CartsManagerFiles {
             this.path,
             JSON.stringify(contenidoJson, null, "\t")
           );
-          return "Carrito modificado";
+          return "cart updated successfully";
         } else {
-          throw new Error("ID no encontrado, no se puede modificar el carrito");
+          throw new Error("can't update cart, id not found");
         }
       }
     } catch (error) {
-      throw new Error("Error al modificar el carrito : " + error);
+      throw new Error("update cart error: " + error);
     }
   }
 }

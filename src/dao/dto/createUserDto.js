@@ -6,5 +6,6 @@ export class CreateUser {
       (this.email = userInfo.email),
       (this.age = userInfo.age);
     this.role = userInfo.role;
+    this.id = userInfo._id;
   }
 }

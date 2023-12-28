@@ -19,8 +19,8 @@ export class ProductsManagerMongo {
       const result = await this.model.find().lean();
       return result;
     } catch (error) {
-      logger.error(`Error al obtener el producto: ${error.message}`);
-      throw new Error(`Error al obtener el producto: ${error.message}`);
+      logger.error(`get products error: ${error.message}`);
+      throw new Error(`get products error: ${error.message}`);
     }
   }
 
@@ -30,8 +30,8 @@ export class ProductsManagerMongo {
       const result = await this.model.paginate(query, options);
       return result;
     } catch (error) {
-      logger.error(`Error al obtener el producto: ${error.message}`);
-      throw new Error(`Error al obtener el producto: ${error.message}`);
+      logger.error(`get products error: ${error.message}`);
+      throw new Error(`get products error: ${error.message}`);
     }
   }
 
@@ -42,7 +42,7 @@ export class ProductsManagerMongo {
       return result;
     } catch (error) {
       const errorAddProduct = CustomError.createError({
-        name: "Error al agregar el producto",
+        name: "error adding product",
         cause: addProductError(),
         message: addProductError(),
         code: EError.PRODUCTS_ERROR,
@@ -58,8 +58,8 @@ export class ProductsManagerMongo {
       const result = await this.model.findById(id);
       return result;
     } catch (error) {
-     logger.error(`Error al obtener el ID del producto: ${error.message}`);
-      throw new Error(`El producto con este ID ${id} no fue encontrado`);
+      logger.error(`get product by id error: ${error.message}`);
+      throw new Error(`the product with ID ${id} wasn't found`);
     }
   }
 
@@ -72,7 +72,7 @@ export class ProductsManagerMongo {
       return result;
     } catch (error) {
       const errorUpdateProduct = CustomError.createError({
-        name: "Error al modificar el producto",
+        name: "error updating product",
         cause: updateProductError(),
         message: updateProductError(),
         code: EError.PRODUCTS_ERROR,
@@ -91,13 +91,13 @@ export class ProductsManagerMongo {
         { new: true }
       );
       if (!result) {
-        throw new Error("Producto no encontrado");
+        throw new Error("product not found");
       } else {
         return result;
       }
     } catch (error) {
-      logger.error(`Error al modificar el stock del producto: ${error.message}`);
-      throw new Error(`Error al modificar el stock del producto: ${error.message}`);
+      logger.error(`update product stock error: ${error.message}`);
+      throw new Error(`update product stock error: ${error.message}`);
     }
   }
 
@@ -112,7 +112,7 @@ export class ProductsManagerMongo {
       }
     } catch (error) {
       const errorDeleteProduct = CustomError.createError({
-        name: "Error al eliminar el producto",
+        name: "error deleting product",
         cause: deleteProductError(),
         message: deleteProductError(),
         code: EError.PRODUCTS_ERROR,

@@ -4,15 +4,24 @@ import { logger } from "../helpers/logger.js";
 
 //check user autehenticated
 export const isAuth = (req, res, next) => {
-  jwt.verify(req.cookies.cookieToken, config.token.privateKey, (err, user) => {
+  const token = req.cookies.cookieToken;
+  if (!token) {
+    return res.json({
+      status: "error",
+      message: "missing cookieToken in the request cookies",
+    });
+  }
+
+  jwt.verify(token, config.token.privateKey, (err, user) => {
     if (err) {
       logger.error(err);
       res.json({
         status: "error",
+        message: "you must be authenticated to access",
       });
-    } else {
-      next();
     }
+    req.user = user;
+    next();
   });
 };
 
@@ -30,8 +39,10 @@ export const checkRole = (roles) => {
           if (roles.includes(user.role)) {
             next();
           } else {
+            const errorMessage = `Access denied for ${user.role}`;
+            logger.error(errorMessage);
             res.redirect(
-              `/profile?error=access_denied&message=Access_denied_for_${user.role}`
+              `/profile?error=access_denied&message=${errorMessage}`
             );
           }
         }
@@ -39,4 +50,3 @@ export const checkRole = (roles) => {
     );
   };
 };
-

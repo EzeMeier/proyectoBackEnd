@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       inputMsg.value = "";
     } else {
       Swal.fire({
-        text: "No se puede enciar un mensaje vacio",
+        text: "you can't send an empty message",
         icon: "error",
         timer: 1500,
         showConfirmButton: false,
